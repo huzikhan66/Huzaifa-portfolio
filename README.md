@@ -1,6 +1,6 @@
 # 🤖 Huzaifa — Automation Specialist Portfolio
 
-> **Live Portfolio:** [https://YOUR-USERNAME.github.io/portfolio](https://YOUR-USERNAME.github.io/portfolio)
+> **Live Portfolio:** [https://YOUR-USERNAME.github.io/portfolio]([https://YOUR-USERNAME.github.io/portfolio](https://huzikhan66.github.io/Huzaifa-portfolio/))
 
 ---
 
