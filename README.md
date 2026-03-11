@@ -43,8 +43,8 @@ I build production-grade automation systems that run 24/7 without human input:
 
 ---
 
-## 03273488887
+## 
 
 📧 48huzaifakhan@gmail.com 
-📱 WhatsApp: +XX-XXX-XXXXXXX  
-🌍 Available for remote work
+📱 WhatsApp: 03273488887
+
