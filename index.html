@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huzaifa — Automation Specialist</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Clash+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060608;
+  --s1:#0d0d12;
+  --s2:#111118;
+  --border:#1c1c28;
+  --g1:#00e5ff;
+  --g2:#ff3d71;
+  --g3:#7b2fff;
+  --text:#dde1f0;
+  --muted:#555570;
+  --mono:'IBM Plex Mono',monospace;
+  --display:'Clash Display','IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--mono);
+  overflow-x:hidden;
+  cursor:none;
+}
+/* CURSOR */
+#dot,#ring{position:fixed;pointer-events:none;z-index:9999;border-radius:50%}
+#dot{width:8px;height:8px;background:var(--g1);margin:-4px 0 0 -4px;transition:transform .1s}
+#ring{width:32px;height:32px;border:1.5px solid rgba(0,229,255,.5);margin:-16px 0 0 -16px;transition:all .18s cubic-bezier(.25,.46,.45,.94)}
+body:hover #ring{opacity:1}
+/* SCANLINE */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:1000}
+/* GRID */
+.grid{position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.2rem 6vw;
+  background:rgba(6,6,8,.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-size:.8rem;color:var(--g1);letter-spacing:.2em;text-transform:uppercase}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{font-size:.65rem;color:var(--muted);text-decoration:none;letter-spacing:.15em;text-transform:uppercase;cursor:none;transition:color .2s}
+.nav-links a:hover{color:var(--g1)}
+/* STATUS PILL */
+.status{display:flex;align-items:center;gap:.5rem;font-size:.65rem;color:var(--muted);letter-spacing:.1em}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:8rem 6vw 4rem;position:relative;
+}
+.hero-eyebrow{
+  font-size:.7rem;color:var(--g1);letter-spacing:.4em;text-transform:uppercase;
+  margin-bottom:2.5rem;
+  opacity:0;animation:up .6s .1s forwards;
+}
+.hero-eyebrow span{color:var(--g2)}
+.hero-h1{
+  font-family:var(--display);
+  font-size:clamp(3.2rem,9vw,8rem);
+  font-weight:700;
+  line-height:.95;
+  letter-spacing:-.03em;
+  opacity:0;animation:up .7s .25s forwards;
+}
+.hero-h1 .outline{
+  display:block;
+  -webkit-text-stroke:1.5px var(--g1);
+  color:transparent;
+}
+.hero-sub{
+  margin-top:2rem;
+  max-width:540px;
+  font-size:.78rem;
+  color:var(--muted);
+  line-height:1.9;
+  opacity:0;animation:up .7s .4s forwards;
+}
+.hero-sub strong{color:var(--text)}
+.hero-btns{
+  display:flex;gap:1rem;margin-top:2.8rem;flex-wrap:wrap;
+  opacity:0;animation:up .7s .55s forwards;
+}
+.btn{padding:.8rem 1.8rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-decoration:none;cursor:none;transition:all .2s;text-transform:uppercase}
+.btn-c{background:var(--g1);color:#000;font-weight:700}
+.btn-c:hover{transform:translate(-3px,-3px);box-shadow:3px 3px 0 var(--g3)}
+.btn-o{border:1px solid var(--border);color:var(--muted)}
+.btn-o:hover{border-color:var(--g1);color:var(--g1)}
+/* GLOW */
+.glow{
+  position:absolute;right:-5vw;top:50%;transform:translateY(-50%);
+  width:min(500px,40vw);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,rgba(123,47,255,.18),rgba(0,229,255,.06),transparent 68%);
+  filter:blur(60px);
+  animation:breathe 5s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes breathe{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.1)}}
+/* TICKER */
+.ticker-outer{overflow:hidden;background:var(--g1);padding:.55rem 0}
+.ticker-inner{display:inline-block;animation:scroll 30s linear infinite;white-space:nowrap;font-size:.68rem;font-weight:700;color:#000;letter-spacing:.12em}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* SECTION */
+section{padding:5rem 6vw;position:relative;z-index:2}
+.sec-label{font-size:.62rem;color:var(--g1);letter-spacing:.4em;text-transform:uppercase;margin-bottom:.8rem}
+.sec-title{font-family:var(--display);font-size:clamp(2rem,4.5vw,3.2rem);font-weight:700;letter-spacing:-.025em;line-height:1.1;margin-bottom:3rem}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));border:1px solid var(--border)}
+.stat{padding:2.5rem 2rem;text-align:center;border-right:1px solid var(--border);background:var(--s1)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--display);font-size:clamp(2.2rem,4vw,3.5rem);font-weight:700;letter-spacing:-.04em;background:linear-gradient(135deg,var(--g1),var(--g3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:.58rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-top:.5rem}
+/* WORKFLOW CARDS */
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.wf-card{background:var(--s1);padding:2rem;position:relative;overflow:hidden;transition:background .25s}
+.wf-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g1),var(--g3));transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.wf-card:hover{background:var(--s2)}
+.wf-card:hover::before{transform:scaleX(1)}
+.wf-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.wf-icon{font-size:1.8rem}
+.wf-nodes{font-size:.58rem;color:var(--g1);letter-spacing:.1em;padding:.3rem .7rem;border:1px solid rgba(0,229,255,.25);background:rgba(0,229,255,.05)}
+.wf-name{font-family:var(--display);font-size:1.1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.7rem}
+.wf-desc{font-size:.68rem;color:var(--muted);line-height:1.8}
+.wf-stack{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.2rem}
+.chip{font-size:.58rem;padding:.28rem .65rem;border:1px solid var(--border);color:var(--g2);border-color:rgba(255,61,113,.25);letter-spacing:.05em}
+/* AHK PROJECTS */
+.ahk-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+.ahk-item{background:var(--s1);padding:2rem 2.5rem;display:grid;grid-template-columns:3rem 1fr auto;gap:2rem;align-items:start;transition:background .2s;cursor:none}
+.ahk-item:hover{background:var(--s2)}
+.ahk-num{font-size:.65rem;color:var(--muted);padding-top:.3rem}
+.ahk-name{font-family:var(--display);font-size:1.1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.5rem}
+.ahk-desc{font-size:.68rem;color:var(--muted);line-height:1.8;max-width:620px}
+.ahk-arrow{font-size:1.1rem;color:var(--muted);transition:all .2s;padding-top:.3rem}
+.ahk-item:hover .ahk-arrow{color:var(--g1);transform:translate(3px,-3px)}
+/* HOW IT WORKS */
+.flow-diagram{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:0;
+  border:1px solid var(--border);
+  position:relative;
+}
+.flow-step{
+  padding:2rem 1.5rem;
+  background:var(--s1);
+  border-right:1px solid var(--border);
+  position:relative;
+  text-align:center;
+}
+.flow-step:last-child{border-right:none}
+.flow-step::after{
+  content:'→';
+  position:absolute;right:-13px;top:50%;transform:translateY(-50%);
+  color:var(--g1);font-size:1.1rem;z-index:2;
+  display:none;
+}
+.flow-step:not(:last-child)::after{display:block}
+.flow-num{font-size:.58rem;color:var(--g1);letter-spacing:.25em;margin-bottom:.8rem}
+.flow-icon{font-size:2rem;margin-bottom:.8rem;display:block}
+.flow-label{font-family:var(--display);font-size:.9rem;font-weight:700;margin-bottom:.4rem}
+.flow-sub{font-size:.6rem;color:var(--muted);line-height:1.7}
+/* GMAIL SECTION */
+.gmail-feature{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  margin-top:2rem;
+}
+.gmail-f{background:var(--s1);padding:2rem}
+.gmail-f-icon{font-size:1.4rem;margin-bottom:1rem}
+.gmail-f-title{font-family:var(--display);font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.gmail-f-desc{font-size:.65rem;color:var(--muted);line-height:1.8}
+/* TERMINAL BLOCK */
+.terminal{
+  background:#0a0a0f;
+  border:1px solid var(--border);
+  padding:1.5rem 2rem;
+  margin-top:2rem;
+  position:relative;
+  overflow:hidden;
+}
+.terminal::before{content:'● ● ●';position:absolute;top:.8rem;left:1rem;font-size:.5rem;color:var(--muted);letter-spacing:.3rem}
+.terminal-body{padding-top:1.5rem;font-size:.68rem;line-height:2;color:var(--muted)}
+.terminal-body .cmd{color:var(--g1)}
+.terminal-body .val{color:var(--g2)}
+.terminal-body .comment{color:#334}
+/* CONTACT */
+.contact{
+  background:var(--s1);
+  border-top:1px solid var(--border);
+  text-align:center;
+  padding:6rem 6vw;
+}
+.contact-big{
+  font-family:var(--display);
+  font-size:clamp(1rem,2.5vw,1.6rem);
+  font-weight:700;
+  color:var(--g1);
+  text-decoration:none;
+  letter-spacing:-.01em;
+  border-bottom:2px solid transparent;
+  transition:border-color .2s;
+  cursor:none;
+}
+.contact-big:hover{border-color:var(--g1)}
+.badges{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+.badge{font-size:.6rem;padding:.4rem 1rem;border:1px solid var(--border);color:var(--muted);letter-spacing:.12em}
+/* REVEAL */
+.r{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease}
+.r.on{opacity:1;transform:none}
+/* UTIL */
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--g3)}
+@media(max-width:640px){
+  .ahk-item{grid-template-columns:1fr}
+  .ahk-num,.ahk-arrow{display:none}
+  .gmail-feature{grid-template-columns:1fr}
+  .flow-step::after{display:none}
+  nav .nav-links{display:none}
+  .glow{display:none}
+}
+</style>
+</head>
+<body>
+<div id="dot"></div>
+<div id="ring"></div>
+<div class="grid"></div>
+
+<!-- NAV -->
+<nav>
+  <span class="logo">huzaifa.dev</span>
+  <div class="nav-links">
+    <a href="#workflows">N8N</a>
+    <a href="#ahk">AutoHotkey</a>
+    <a href="#gmail">Gmail</a>
+    <a href="#contact">Hire Me</a>
+  </div>
+  <div class="status"><span class="status-dot"></span>Available for work</div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-outer" style="margin-top:60px">
+  <span class="ticker-inner">
+    ★ N8N AUTOMATION &nbsp;&nbsp; ★ AUTOHOTKEY SCRIPTS &nbsp;&nbsp; ★ BULK EMAIL SYSTEMS &nbsp;&nbsp; ★ GMAIL ACCOUNT MANAGEMENT &nbsp;&nbsp; ★ WHATSAPP AI AGENT &nbsp;&nbsp; ★ GOOGLE SHEETS INTEGRATION &nbsp;&nbsp; ★ OPENAI WORKFLOWS &nbsp;&nbsp; ★ COLD EMAIL SEQUENCES &nbsp;&nbsp; ★ FOLLOW-UP AUTOMATION &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    ★ N8N AUTOMATION &nbsp;&nbsp; ★ AUTOHOTKEY SCRIPTS &nbsp;&nbsp; ★ BULK EMAIL SYSTEMS &nbsp;&nbsp; ★ GMAIL ACCOUNT MANAGEMENT &nbsp;&nbsp; ★ WHATSAPP AI AGENT &nbsp;&nbsp; ★ GOOGLE SHEETS INTEGRATION &nbsp;&nbsp; ★ OPENAI WORKFLOWS &nbsp;&nbsp; ★ COLD EMAIL SEQUENCES &nbsp;&nbsp; ★ FOLLOW-UP AUTOMATION &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>
+</div>
+
+<main>
+<!-- HERO -->
+<section class="hero">
+  <div class="glow"></div>
+  <p class="hero-eyebrow">// Automation Specialist — <span>Available to Hire</span></p>
+  <h1 class="hero-h1">
+    Huzaifa
+    <span class="outline">Automates</span>
+  </h1>
+  <p class="hero-sub">
+    I build <strong>production-grade automation systems</strong> — n8n workflows with 30+ nodes,
+    AutoHotkey bots that send emails at scale, WhatsApp AI agents, and bulk Gmail pipelines
+    that run <strong>24/7 without human input.</strong>
+  </p>
+  <div class="hero-btns">
+    <a href="#workflows" class="btn btn-c">See My Work →</a>
+    <a href="#contact" class="btn btn-o">Hire Me</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<section style="padding-top:0;padding-bottom:3rem">
+  <div class="stats r">
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Live Projects</div></div>
+    <div class="stat"><div class="stat-n">122</div><div class="stat-l">N8N Nodes Built</div></div>
+    <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Gmail Accounts Managed</div></div>
+    <div class="stat"><div class="stat-n">50/tab</div><div class="stat-l">Emails per Gmail Tab</div></div>
+    <div class="stat"><div class="stat-n">6.5s</div><div class="stat-l">Per Email (AHK Speed)</div></div>
+  </div>
+</section>
+
+<!-- N8N WORKFLOWS -->
+<section id="workflows">
+  <p class="sec-label r">// N8N Automation Workflows</p>
+  <h2 class="sec-title r">Real Workflows I Built</h2>
+
+  <div class="wf-grid r">
+
+    <!-- Workflow 1 -->
+    <div class="wf-card">
+      <div class="wf-head">
+        <span class="wf-icon">📧</span>
+        <span class="wf-nodes">32 NODES</span>
+      </div>
+      <div class="wf-name">Email Marketing Automation</div>
+      <div class="wf-desc">
+        Full cold email sequence engine. Reads leads from Google Sheets, personalizes each message with name/company placeholders, checks previous thread history, classifies replies (interested vs not), handles multi-step follow-up sequences automatically, and updates last-contacted time in sheet after send.
+      </div>
+      <div class="wf-stack">
+        <span class="chip">Gmail API</span>
+        <span class="chip">Google Sheets</span>
+        <span class="chip">Code Node</span>
+        <span class="chip">Sub-workflows</span>
+        <span class="chip">Thread Classifier</span>
+      </div>
+    </div>
+
+    <!-- Workflow 2 -->
+    <div class="wf-card">
+      <div class="wf-head">
+        <span class="wf-icon">🤖</span>
+        <span class="wf-nodes">28 NODES</span>
+      </div>
+      <div class="wf-name">WhatsApp AI Sales Agent</div>
+      <div class="wf-desc">
+        Fully autonomous WhatsApp bot powered by OpenAI GPT. Loads product brochures into a Vector Store (RAG system), splits and embeds documents, answers customer questions intelligently, remembers conversation history with Window Buffer Memory, and sends auto-replies — no human needed.
+      </div>
+      <div class="wf-stack">
+        <span class="chip">WhatsApp API</span>
+        <span class="chip">OpenAI GPT</span>
+        <span class="chip">Vector Store</span>
+        <span class="chip">RAG System</span>
+        <span class="chip">Window Memory</span>
+      </div>
+    </div>
+
+    <!-- Workflow 3 -->
+    <div class="wf-card">
+      <div class="wf-head">
+        <span class="wf-icon">⚡</span>
+        <span class="wf-nodes">36 NODES</span>
+      </div>
+      <div class="wf-name">20-Account Gmail Bulk Sender</div>
+      <div class="wf-desc">
+        Advanced multi-account email distribution system for Marain & Williams. Routes leads from Google Sheets through a smart Switch node across 20 separate Gmail accounts. Includes batch looping, wait timers for rate limits, lead data restoration, email merging, and automatic row updates after each send.
+      </div>
+      <div class="wf-stack">
+        <span class="chip">20 Gmail Accounts</span>
+        <span class="chip">Switch Router</span>
+        <span class="chip">Batch Loop</span>
+        <span class="chip">Google Sheets</span>
+        <span class="chip">Wait Nodes</span>
+      </div>
+    </div>
+
+    <!-- Workflow 4 -->
+    <div class="wf-card">
+      <div class="wf-head">
+        <span class="wf-icon">🔄</span>
+        <span class="wf-nodes">26 NODES</span>
+      </div>
+      <div class="wf-name">Marain & Williams Email System</div>
+      <div class="wf-desc">
+        Client-specific multi-account email pipeline with named Gmail accounts (Jason, Octavio, John Smith, Oscar). Smart routing logic distributes email load across accounts, handles merge/split flows, tracks sent status back in Google Sheets, and includes wait node delays to avoid spam detection.
+      </div>
+      <div class="wf-stack">
+        <span class="chip">Named Accounts</span>
+        <span class="chip">Smart Routing</span>
+        <span class="chip">Merge Nodes</span>
+        <span class="chip">Spam Protection</span>
+        <span class="chip">Sheet Tracking</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- How it works diagram -->
+  <div style="margin-top:3rem">
+    <p class="sec-label r">// How my email workflow runs</p>
+    <div class="flow-diagram r">
+      <div class="flow-step">
+        <div class="flow-num">STEP 01</div>
+        <span class="flow-icon">📊</span>
+        <div class="flow-label">Google Sheets</div>
+        <div class="flow-sub">Leads pulled with name, email &amp; status columns</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">STEP 02</div>
+        <span class="flow-icon">🔀</span>
+        <div class="flow-label">Route &amp; Batch</div>
+        <div class="flow-sub">Switch node distributes across accounts in batches</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">STEP 03</div>
+        <span class="flow-icon">✉️</span>
+        <div class="flow-label">Personalize &amp; Send</div>
+        <div class="flow-sub">Name/company injected, sent via correct Gmail</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">STEP 04</div>
+        <span class="flow-icon">⏱️</span>
+        <div class="flow-label">Wait &amp; Rotate</div>
+        <div class="flow-sub">Rate-limit timers prevent spam flags</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">STEP 05</div>
+        <span class="flow-icon">✅</span>
+        <div class="flow-label">Update Sheet</div>
+        <div class="flow-sub">Sent time written back, row advances</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTOHOTKEY -->
+<section id="ahk" style="padding-top:0">
+  <p class="sec-label r">// AutoHotkey Scripts</p>
+  <h2 class="sec-title r">Desktop Automation Bots</h2>
+
+  <div class="ahk-list r">
+
+    <div class="ahk-item">
+      <span class="ahk-num">01</span>
+      <div>
+        <div class="ahk-name">Fast Email Sender — 6.5 sec/email</div>
+        <div class="ahk-desc">
+          High-speed AHK bot. Reads Name (Col A) and Email (Col B) from Google Sheets tab, switches to Gmail tab, clicks Compose, pastes email, fills personalized greeting, sends — then jumps to next row. Handles 5 Gmail tabs, sends 50 emails per tab before rotating. Toggle with <strong style="color:var(--g1)">Ctrl+Shift+F</strong>.
+        </div>
+        <div class="wf-stack" style="margin-top:.8rem">
+          <span class="chip">50 emails/tab</span>
+          <span class="chip">5 Gmail tabs</span>
+          <span class="chip">Auto tab switch</span>
+          <span class="chip">Hotkey toggle</span>
+        </div>
+      </div>
+      <span class="ahk-arrow">↗</span>
+    </div>
+
+    <div class="ahk-item">
+      <span class="ahk-num">02</span>
+      <div>
+        <div class="ahk-name">Advanced Greeting Email Bot</div>
+        <div class="ahk-desc">
+          Enhanced version with personalized greetings. Pulls recipient name from Sheet, injects it into the email body dynamically before sending. Slightly longer sleep timers for stability on slower machines. Same tab rotation and Hotkey toggle system as the fast sender.
+        </div>
+        <div class="wf-stack" style="margin-top:.8rem">
+          <span class="chip">Dynamic name injection</span>
+          <span class="chip">Personalized body</span>
+          <span class="chip">Stable timers</span>
+        </div>
+      </div>
+      <span class="ahk-arrow">↗</span>
+    </div>
+
+    <div class="ahk-item">
+      <span class="ahk-num">03</span>
+      <div>
+        <div class="ahk-name">Follow-Up Email Automation</div>
+        <div class="ahk-desc">
+          Automated reply bot for follow-up campaigns. Opens Gmail inbox, uses Gmail keyboard shortcut (<strong style="color:var(--g1)">R</strong>) to reply, pastes pre-written follow-up from clipboard, sends with <strong style="color:var(--g1)">Ctrl+Enter</strong>, jumps to next email with <strong style="color:var(--g1)">J</strong>. Runs 100-email batches then switches tab automatically. Instant stop with ESC.
+        </div>
+        <div class="wf-stack" style="margin-top:.8rem">
+          <span class="chip">100 email batches</span>
+          <span class="chip">ESC emergency stop</span>
+          <span class="chip">Gmail shortcuts</span>
+          <span class="chip">Auto tab advance</span>
+        </div>
+      </div>
+      <span class="ahk-arrow">↗</span>
+    </div>
+
+    <div class="ahk-item">
+      <span class="ahk-num">04</span>
+      <div>
+        <div class="ahk-name">AutoEmailSender.exe — Compiled App</div>
+        <div class="ahk-desc">
+          Complete AHK project compiled into a standalone Windows executable. No installation required — runs on any Windows PC. The full email sending automation packaged for client delivery.
+        </div>
+        <div class="wf-stack" style="margin-top:.8rem">
+          <span class="chip">Standalone .exe</span>
+          <span class="chip">No install needed</span>
+          <span class="chip">Client-ready</span>
+        </div>
+      </div>
+      <span class="ahk-arrow">↗</span>
+    </div>
+
+  </div>
+
+  <!-- Terminal preview -->
+  <div class="terminal r">
+    <div class="terminal-body">
+      <span class="comment">; AHK Fast Sender — core logic snippet</span><br>
+      <span class="cmd">emailsPerTab</span> := <span class="val">50</span> &nbsp;&nbsp;<span class="comment">; 50 emails before switching Gmail tab</span><br>
+      <span class="cmd">currentTab</span> &nbsp;:= gmailTabsStart &nbsp;&nbsp;<span class="comment">; starts from tab 2</span><br><br>
+      <span class="comment">; read from Google Sheets</span><br>
+      <span class="cmd">recipientName</span> &nbsp;:= Clipboard &nbsp;&nbsp;<span class="comment">; col A — name</span><br>
+      <span class="cmd">recipientEmail</span> := Clipboard &nbsp;&nbsp;<span class="comment">; col B — email</span><br><br>
+      <span class="comment">; compose → paste → send → next row → repeat</span><br>
+      <span class="cmd">Send</span> <span class="val">^%currentTab%</span> &nbsp; <span class="comment">; switch to Gmail tab</span><br>
+      <span class="cmd">Click</span> <span class="val">Compose Button</span><br>
+      <span class="cmd">Send</span> <span class="val">%recipientEmail%</span> → Tab → <span class="val">%subject%</span> → Ctrl+Enter
+    </div>
+  </div>
+</section>
+
+<!-- GMAIL MANAGEMENT -->
+<section id="gmail" style="padding-top:0">
+  <p class="sec-label r">// Gmail Account Infrastructure</p>
+  <h2 class="sec-title r">Multi-Account Email System</h2>
+  <p class="r" style="font-size:.72rem;color:var(--muted);line-height:1.9;max-width:680px;margin-bottom:0">
+    I manage a structured fleet of Gmail accounts for high-volume cold outreach. Each account is configured with custom senders, rate-limited sending schedules, and routed intelligently via n8n Switch nodes to distribute email load and protect sender reputation.
+  </p>
+
+  <div class="gmail-feature r">
+    <div class="gmail-f">
+      <div class="gmail-f-icon">📂</div>
+      <div class="gmail-f-title">20-Account Routing</div>
+      <div class="gmail-f-desc">n8n Switch node routes each lead to a specific Gmail account based on index. Prevents single-account overloading and reduces spam risk across the board.</div>
+    </div>
+    <div class="gmail-f">
+      <div class="gmail-f-icon">⏳</div>
+      <div class="gmail-f-title">Rate Limit Protection</div>
+      <div class="gmail-f-desc">Wait nodes and sleep timers built into every workflow. Sending pace controlled at 50 emails/account/session to stay within Google's limits.</div>
+    </div>
+    <div class="gmail-f">
+      <div class="gmail-f-icon">🔄</div>
+      <div class="gmail-f-title">Sheet-Synced Tracking</div>
+      <div class="gmail-f-desc">Every send updates the Google Sheet row in real-time — timestamp, account used, status. Zero double-sends, full audit trail per lead.</div>
+    </div>
+    <div class="gmail-f">
+      <div class="gmail-f-icon">🧩</div>
+      <div class="gmail-f-title">Named Personas</div>
+      <div class="gmail-f-desc">Accounts like Jason, Octavio, John Smith, Oscar — each with unique signatures, making outreach appear human and personal rather than automated.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <p class="sec-label" style="justify-content:center;display:block">// Let's Work Together</p>
+  <h2 class="sec-title" style="margin-bottom:1.5rem">Need automation<br>that actually works?</h2>
+  <p style="font-size:.72rem;color:var(--muted);max-width:480px;margin:0 auto 2.5rem;line-height:1.9">
+    N8N workflows, AutoHotkey bots, Gmail systems, WhatsApp AI agents —
+    I build it, test it, and hand it over running.
+  </p>
+  <a href="mailto:your@email.com" class="contact-big">your@email.com</a>
+  <div class="badges">
+    <span class="badge">🌍 Remote Work</span>
+    <span class="badge">📱 WhatsApp Available</span>
+    <span class="badge">⚡ Fast Delivery</span>
+    <span class="badge">🔧 Post-delivery Support</span>
+  </div>
+  <p style="margin-top:3rem;font-size:.6rem;color:#2a2a3a">
+    © 2025 Huzaifa — Automation Specialist
+  </p>
+</section>
+</main>
+
+<script>
+// Cursor
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  dot.style.left=mx+'px';dot.style.top=my+'px';
+});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+
+// Reveal
+const els=document.querySelectorAll('.r');
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.08}).observe||(els.forEach(e=>e.classList.add('on')));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.08});
+els.forEach(e=>io.observe(e));
+</script>
+</body>
+</html>
