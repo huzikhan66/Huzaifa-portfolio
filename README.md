@@ -24,7 +24,7 @@ I build production-grade automation systems that run 24/7 without human input:
 | Email Marketing Automation | 32 | Full cold email sequence with thread classification & follow-up |
 | WhatsApp AI Sales Agent | 28 | GPT + Vector Store bot with product knowledge base |
 | 20-Account Gmail Bulk Sender | 36 | Routes leads across 20 Gmail accounts with rate limiting |
-| Marain & Williams Email System | 26 | Named persona accounts (Jason, Oscar, etc.) with sheet tracking |
+| 10 Gmail Node | 26 | Named persona accounts (Jason, Oscar, etc.) with sheet tracking |
 
 ### AutoHotkey Scripts
 
@@ -43,8 +43,8 @@ I build production-grade automation systems that run 24/7 without human input:
 
 ---
 
-## Contact
+## 03273488887
 
-📧 your@email.com  
+📧 48huzaifakhan@gmail.com 
 📱 WhatsApp: +XX-XXX-XXXXXXX  
 🌍 Available for remote work
